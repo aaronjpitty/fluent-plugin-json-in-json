@@ -1,67 +1,41 @@
+require 'fluent/parser'
 require 'yajl'
 
 module Fluent
-  class TextParser
+  module Plugin
     class JSONInJSONParser < Parser
-      Fluent::Plugin.register_parser('json_in_json', self)
+      Plugin.register_parser('json_in_json', self)
 
-      config_param :time_key, :string, :default => 'time'
-      config_param :time_format, :string, :default => nil
+      config_set_default :time_key, 'time'
+      config_set_default :time_type, :float
 
       def configure(conf)
         super
-
-        unless @time_format.nil?
-          @time_parser = TimeParser.new(@time_format)
-          @mutex = Mutex.new
-        end
       end
 
       def parse(text)
         record = Yajl.load(text)
 
-        value = @keep_time_key ? record[@time_key] : record.delete(@time_key)
-        if value
-          if @time_format
-            time = @mutex.synchronize { @time_parser.parse(value) }
-          else
-            begin
-              time = value.to_i
-            rescue => e
-              raise ParserError, "invalid time value: value = #{value}, error_class = #{e.class.name}, error = #{e.message}"
-            end
-          end
-        else
-          if @estimate_current_event
-            time = Engine.now
-          else
-            time = nil
-          end
-        end
-
         values = Hash.new
+
         record.each do |k, v|
-          if v[0] == '{'
+          if v.is_a?(String) && /^\s*(\{|\[)/ =~ v
             deserialized = Yajl.load(v)
             if deserialized.is_a?(Hash)
               values.merge!(deserialized)
               record.delete k
+            elsif deserialized.is_a?(Array)
+              values[k] = deserialized
             end
           end
         end
         record.merge!(values)
 
-        if block_given?
-          yield time, record
-        else
-          return time, record
-        end
+        time, record = convert_values(parse_time(record), record)
+
+        yield time, record
       rescue Yajl::ParseError
-        if block_given?
-          yield nil, nil
-        else
-          return nil, nil
-        end
+        yield nil, nil
       end
     end
   end
