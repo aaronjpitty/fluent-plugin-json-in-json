@@ -10,6 +10,10 @@ module Fluent
       config_set_default :time_type, :float
 
       def configure(conf)
+        if conf.has_key?('time_format')
+          conf['time_type'] ||= 'string'
+        end
+
         super
       end
 
