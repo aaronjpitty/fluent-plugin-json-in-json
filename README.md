@@ -1,11 +1,10 @@
-# fluent-plugin-json-in-json
+# fluent-plugin-json-in-json [![Gem Version](https://badge.fury.io/rb/fluent-plugin-json-in-json-2.svg)](https://badge.fury.io/rb/fluent-plugin-json-in-json-2)
+
+This is a fork repo of [arcivanov/fluent-plugin-json-in-json](https://github.com/arcivanov/fluent-plugin-json-in-json) which itself fork of [gmr/fluent-plugin-json-in-json](https://github.com/gmr/fluent-plugin-json-in-json) which is not supported now.
+
+The purpose of this repo to publish actual version of `fluent-plugin-json-in-json` plugin.
 
 ## Requirements
-
-| fluent-plugin-json-in-json| Fluentd     | Ruby   |
-|---------------------------|-------------|--------|
-| >= 1.0.0                  | >= v0.14.0  | >= 2.1 |
-|  < 1.0.0                  | >= v0.12.0  | >= 1.9 |
 
 This fluentd parser plugin parses JSON log lines with nested JSON strings. For
 example, given a docker log of ``{"log": "{\"foo\": \"bar\"}"}``, the log record
@@ -15,7 +14,7 @@ will be parsed into ``{:log => { :foo => "bar" }}``.
 
 Add this line to your application's Gemfile:
 
-    gem 'fluent-plugin-json-in-json'
+    gem 'fluent-plugin-json-in-json-2'
 
 And then execute:
 
@@ -23,7 +22,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fluent-plugin-json-in-json
+    $ gem install fluent-plugin-json-in-json-2
 
 
 ## Usage

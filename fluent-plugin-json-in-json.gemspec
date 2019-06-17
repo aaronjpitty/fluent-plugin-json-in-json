@@ -1,12 +1,12 @@
 # coding: utf-8
 Gem::Specification.new do |spec|
-  spec.name          = "fluent-plugin-json-in-json"
-  spec.version       = "1.0.0"
-  spec.authors       = ["Gavin M. Roy", "Arcadiy Ivanov"]
-  spec.email         = ["gavinmroy@gmail.com", "arcadiy@ivanov.biz"]
+  spec.name          = "fluent-plugin-json-in-json-2"
+  spec.version       = "1.0.1"
+  spec.authors       = ["Gavin M. Roy", "Arcadiy Ivanov", "Alik Khilazhev"]
+  spec.email         = ["gavinmroy@gmail.com", "arcadiy@ivanov.biz", "alikhil@mail.ru"]
   spec.description   = %q{Parser plugin that parses JSON attributes with JSON strings in them}
   spec.summary       = %q{Parser plugin that parses JSON attributes with JSON strings in them}
-  spec.homepage      = "https://github.com/arcivanov/fluent-plugin-json-in-json"
+  spec.homepage      = "https://github.com/alikhil/fluent-plugin-json-in-json"
   spec.license       = "BSD"
 
   spec.files         = `git ls-files`.split($/)
