@@ -1,6 +1,7 @@
 require_relative 'helper'
 require 'fluent/test/driver/parser'
 require 'fluent/plugin/parser_json_in_json'
+require 'yajl'
 
 class JsonInJsonParserTest < ::Test::Unit::TestCase
   def setup
@@ -43,7 +44,7 @@ class JsonInJsonParserTest < ::Test::Unit::TestCase
   def test_parse_string_time()
     @parser.configure('time_format' => '%Y-%m-%dT%H:%M:%S.%NZ', 'keep_time_key' => 'true')
     @parser.instance.parse('{"log":"2018-06-26 13:20:44.075  INFO --- [pool-8-thread-3] outgoing","stream":"stdout","time":"2018-06-26T13:20:44.076022960Z"}') { |time, record|
-      assert_equal(event_time('2018-06-26 13:20:44.076022960 -0400').to_f, time.to_f)
+      assert_equal(event_time('2018-06-26 13:20:44.076022960').to_f, time.to_f)
       assert_equal({
                     'log'=>'2018-06-26 13:20:44.075  INFO --- [pool-8-thread-3] outgoing',
                     'stream'=>'stdout',
@@ -51,4 +52,16 @@ class JsonInJsonParserTest < ::Test::Unit::TestCase
                    }, record)
     }
   end
+
+  def test_yajl_load()
+    @parser.configure({})
+    @parser.instance.parse('{ "log": " [ msg ] messoge  [ k ]", "stream": "stdout"}') { |time, record|
+      assert_equal({
+        'log'=> ' [ msg ] messoge  [ k ]',
+        'stream'=>'stdout',
+      }, record)
+    }
+    # Yajl.load('["kek":1}')
+  end
+
 end

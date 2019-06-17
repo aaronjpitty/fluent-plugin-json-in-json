@@ -24,12 +24,16 @@ module Fluent
 
         record.each do |k, v|
           if v.is_a?(String) && /^\s*(\{|\[)/ =~ v
-            deserialized = Yajl.load(v)
-            if deserialized.is_a?(Hash)
-              values.merge!(deserialized)
-              record.delete k
-            elsif deserialized.is_a?(Array)
-              values[k] = deserialized
+            begin
+              deserialized = Yajl.load(v)
+              if deserialized.is_a?(Hash)
+                values.merge!(deserialized)
+                record.delete k
+              elsif deserialized.is_a?(Array)
+                values[k] = deserialized
+              end
+            rescue Yajl::ParseError
+              # continue if failed to parse record
             end
           end
         end
