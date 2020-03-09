@@ -39,9 +39,9 @@ module Fluent
         end
         record.merge!(values)
 
-        time, record = convert_values(parse_time(record), record)
+        timestamp, record = convert_values(parse_time(record), record)
 
-        yield time, record
+        yield timestamp, record
       rescue Yajl::ParseError
         yield nil, nil
       end
