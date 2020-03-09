@@ -6,7 +6,7 @@ module Fluent
     class JSONInJSONParser < Parser
       Plugin.register_parser('json_in_json', self)
 
-      config_set_default :time_key, 'time'
+      config_set_default :time_key, 'timestamp'
       config_set_default :time_type, :float
 
       def configure(conf)
